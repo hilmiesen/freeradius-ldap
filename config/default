@@ -1,0 +1,42 @@
+server default {
+listen {
+	type = auth
+	ipaddr = *
+	port = 0
+#	interface = eth0
+	limit {
+	      max_connections = 16
+	      lifetime = 0
+	      idle_timeout = 30
+	}
+}
+
+authorize {
+        ldap
+        if (ok || updated)  {
+	        update control {
+	        Auth-Type := ldap
+	        }
+        }
+        if (notfound) {
+        	reject
+    	}
+}
+authenticate {
+        Auth-Type LDAP {
+                ldap
+        }
+}
+
+post-auth {
+	if (LDAP-Group == "LDAP_RADIUS_ACCESS_GROUP") {
+	    noop
+	}
+	Post-Auth-Type REJECT {
+		attr_filter.access_reject
+		update reply {
+            Reply-Message = "Invalid Username / Password"
+		}
+	}
+}
+}

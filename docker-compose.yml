@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+   freeradius-ldap:
+      image: freeradius
+      ports:
+         - "10.10.10.10:1812:1812/udp"
+      environment:
+         - LDAP_HOST=10.10.101.20
+         - LDAP_PORT=389
+         - LDAP_USERNAME=CN=radius,OU=tnetworks_servis,DC=tnetworks,DC=local
+         - LDAP_PASSWORD=Abc234!
+         - LDAP_BASEDN=DC=tnetworks,DC=local
+         - LDAP_USER_CN=sAMAccountName
+         - LDAP_GROUP_CN=group
+         - LDAP_GROUP_ATTRIBUTE=memberOf
+         - LDAP_RADIUS_ACCESS_GROUP=CN=teknik,OU=tnetworks,DC=tnetworks,DC=local
+         - RADIUS_CLIENT_CREDENTIALS=10.10.101.20:test234,10.10.101.21:tes345
+
+

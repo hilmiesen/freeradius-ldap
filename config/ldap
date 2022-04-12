@@ -1,0 +1,30 @@
+ldap {
+	server = 'LDAP_HOST'
+	port = 'LDAP_PORT'
+	identity = 'LDAP_USERNAME'
+	password = 'LDAP_PASSWORD'
+	base_dn = 'LDAP_BASEDN'
+
+	user {
+		base_dn = "${..base_dn}"
+		filter = "(&(LDAP_USER_CN=%{%{Stripped-User-Name}:-%{User-Name}})(objectClass=*))"
+	}
+    group {
+        base_dn = "${..base_dn}"
+        filter = '(objectClass=LDAP_GROUP_CN)'
+        membership_attribute = 'LDAP_GROUP_ATTRIBUTE'
+        scope = 'sub'
+    }
+
+	options {
+		chase_referrals = no
+		rebind = yes
+		res_timeout = 20
+		srv_timelimit = 3
+		net_timeout = 1
+		idle = 60
+		probes = 3
+		interval = 3
+		ldap_debug = 0x0028
+	}
+}
